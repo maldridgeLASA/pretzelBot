@@ -9,11 +9,11 @@ RBAK = 201
 
 
 class pretzelRobot:
-  def setup_link(port):
+  def setup_link(self, port):
     ser = serial.Serial(port, 115200)
     print "using port", ser.portstr
 
-  def drive(lspeed, rspeed):
+  def drive(self, lspeed, rspeed):
     if lspeed<0:
       ser.write(str(LBAK)+str(lspeed))
     else:
@@ -23,9 +23,9 @@ class pretzelRobot:
     else:
       ser.write(str(202)+str(127))
 
-  def main():
+  def main(self):
     #setup_link(raw_input("Port? "))
-    setup_link('/dev/ttyUSB0')
+    self.setup_link('/dev/ttyUSB0')
     #left=int(raw_input("Left Speed? "))
     #right=int(raw_input("Right Speed? "))
     drive(127,127)
@@ -34,5 +34,7 @@ class pretzelRobot:
     exit()
 
 
+r = pretzelRobot
 
+r.main(self)
 

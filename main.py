@@ -32,5 +32,21 @@ def init():
 
 def main():
     while True:
-        chassis.tankDrive(0,0)
+        key = getkey()
+        if key=='w':
+            lspeed = 1
+            rspeed = 1
+        elif key=='a':
+            lspeed = -1
+            rspeed =  1
+        elif key=='d':
+            lspeed =  1
+            rspeed = -1
+        elif key=='s':
+            lspeed = -1
+            rspeed = -1
+        elif key=='\n':
+            logging.info("Exiting...")
+            sys.exit(0)
+        chassis.tankDrive(lspeed,rspeed)
         time.sleep(0.05)

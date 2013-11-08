@@ -7,10 +7,11 @@ import motor_control
 import time
 import sys
 import termios
+import curses
 
 
 TERMIOS = termios
-    def getkey():
+def getkey():
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     new = termios.tcgetattr(fd)
@@ -26,13 +27,16 @@ TERMIOS = termios
     return c
 
 def init():
-    logging.baseConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
     logging.info("Program start")
     chassis = motor_control.Drive('/dev/ttyAMA0', '115200')   
 
 def main():
+    stdscr = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
     while True:
-        key = getkey()
+        key = stdscr.getch()
         if key=='w':
             lspeed = 1
             rspeed = 1
@@ -47,6 +51,12 @@ def main():
             rspeed = -1
         elif key=='\n':
             logging.info("Exiting...")
+            curses.echo()
+            curses.nocbreak()
+            curses.endwin()
             sys.exit(0)
         chassis.tankDrive(lspeed,rspeed)
         time.sleep(0.05)
+
+init()
+main()

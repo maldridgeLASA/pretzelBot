@@ -3,14 +3,14 @@ import logging
 import sys
 
 class Drive:
-  self.LFWD = 194
-  self.RFWD = 202
-  self.LBAK = 193
-  self.RBAK = 201
-  def __init__(self, port):
+  def __init__(self, port, baud):
+    self.LFWD = 194
+    self.RFWD = 202
+    self.LBAK = 193
+    self.RBAK = 201
     try:
-      self.ser = serial.Serial(port, 115200)
-      logging.info("Attempting to open port %s", port)
+      self.ser = serial.Serial(port, baud)
+      logging.info("Attempting to open port %s @ %s", port, baud)
     except:
       logging.error("Could not open port, aborting")
       sys.exit(1)

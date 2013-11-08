@@ -9,29 +9,15 @@ import sys
 import termios
 import curses
 
-
-TERMIOS = termios
-def getkey():
-    fd = sys.stdin.fileno()
-    old = termios.tcgetattr(fd)
-    new = termios.tcgetattr(fd)
-    new[3] = new[3] & ~TERMIOS.ICANON & ~TERMIOS.ECHO
-    new[6][TERMIOS.VMIN] = 1
-    new[6][TERMIOS.VTIME] = 0
-    termios.tcsetattr(fd, TERMIOS.TCSANOW, new)
-    c = None
-    try:
-        c = os.read(fd, 1)
-    finally:
-        termios.tcsetattr(fd, TERMIOS.TCSAFLUSH, old)
-    return c
-
 def init():
     logging.basicConfig(level=logging.DEBUG)
     logging.info("Program start")
+    global chassis
     chassis = motor_control.Drive('/dev/ttyAMA0', '115200')   
 
 def main():
+    lspeed=0
+    rspeed=0
     stdscr = curses.initscr()
     curses.noecho()
     curses.cbreak()
@@ -55,7 +41,9 @@ def main():
             curses.nocbreak()
             curses.endwin()
             sys.exit(0)
-        chassis.tankDrive(lspeed,rspeed)
+        chassis.TankDrive(lspeed,rspeed)
+        lspeed =0
+        rspeed =0
         time.sleep(0.05)
 
 init()
